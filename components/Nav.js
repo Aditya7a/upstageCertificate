@@ -1,93 +1,42 @@
+import React from "react";
 import Image from "next/image";
 import Logo from "/public/images/logo.png";
-import { MenuIcon } from "@heroicons/react/outline";
-import Head from "next/head";
+import Button from "./Button";
+import { BookOpenIcon } from "@heroicons/react/outline";
+import { BadgeCheckIcon } from "@heroicons/react/solid";
 
 function Nav() {
-    return (
-        <>
-            <div>
-                <Head>
-                    <title>AdoptEV</title>
-                </Head>
+  return (
+    <>
+      <aside className="" aria-label="Sidebar">
+        <div className=" mt-8 h-screen items-center justify-center rounded bg-white dark:bg-gray-800">
+          <div className=" mt-8 flex items-center justify-center">
+            <div className="flex h-40 w-40 items-center justify-center rounded-full border-8 border-b1">
+              <Image src={Logo} alt="Logo.png" />
             </div>
-            {/* Top */}
-            <nav>
-                <div className=' text-b1 sticky top-0 z-[1000] bg-white '>
-                    <div className='my_grid'>
-                        <div className='hidden md:flex'>
-                            <span className='hover:text-g2 col-start-1 flex cursor-pointer items-center px-2 text-2xl font-extrabold md:px-0'>
-                                <Image src={Logo} alt='Logo.png' />
-                            </span>
-                        </div>
-
-                        {/* Small Screen Nav */}
-                        <div className='col-span-full flex flex-row items-center px-2 md:hidden '>
-                            <MenuIcon className=' flex h-4 cursor-pointer items-center  hover:underline hover:decoration-2 ' />
-
-                            <p className='cursor-pointer items-center px-2 text-2xl font-extrabold  '>
-                                ADOPTEV
-                            </p>
-                        </div>
-
-                        <div className='col-span-4 col-start-9 hidden flex-row content-evenly justify-end gap-8 text-sm font-medium md:flex'>
-                            <p className='flex cursor-pointer items-center py-2'>
-                                Finance
-                            </p>
-                            <p className='flex cursor-pointer items-center py-2'>
-                                Partner With Us
-                            </p>
-                            <div className='flex items-center py-2'>
-                                <button className='bg-b1 hover:text-b1 h-[35px] cursor-pointer rounded px-8 text-base font-bold text-white hover:bg-white hover:shadow-xl'>
-                                    Login
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {/* Bottom */}
-                <div className='bg-white_2 sticky top-0 '>
-                    <div className='my_grid text-my_black hidden flex-row gap-4 py-[8px] text-sm md:flex'>
-                        <span className='hover:decoration-g2 flex cursor-pointer flex-row items-center gap-2 hover:underline hover:decoration-2 '>
-                            <MenuIcon className='hover:text-g2 h-6' />
-                            <p>All</p>
-                        </span>
-                        <div className='hidden flex-row items-center gap-4 md:flex'>
-                            <p className='hover:decoration-g2 cursor-pointer hover:underline hover:decoration-2'>
-                                3-Wheelers
-                            </p>
-                            <p className='hover:decoration-g2 cursor-pointer hover:underline hover:decoration-2'>
-                                2-Wheelers
-                            </p>
-                            <p className='hover:decoration-g2 cursor-pointer hover:underline hover:decoration-2'>
-                                Bicycles
-                            </p>
-                            <p className='hover:decoration-g2 cursor-pointer hover:underline hover:decoration-2'>
-                                Cars
-                            </p>
-                            <p className='hover:decoration-g2 cursor-pointer hover:underline hover:decoration-2'>
-                                Batteries
-                            </p>
-                        </div>
-                        <div className='hidden flex-row items-center gap-4 lg:flex'>
-                            <p className='cursor-pointer hover:underline'>
-                                GPS
-                            </p>
-                            <p className='hover:decoration-g2 cursor-pointer hover:underline hover:decoration-2'>
-                                Tyres
-                            </p>
-                            <p className='hover:decoration-g2 cursor-pointer hover:underline hover:decoration-2'>
-                                Infotainment System
-                            </p>
-                            <p className='hover:decoration-g2 cursor-pointer hover:underline hover:decoration-2'>
-                                Other Accessories
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-        </>
-    );
+          </div>
+          <div className="mt-4 flex items-center justify-center text-xl font-bold">
+            ACIC BMU
+          </div>
+          <div className="mt-2 flex items-center justify-center text-sm font-medium text-[#8f8f8f]">
+            ADMIN
+          </div>
+          <div className="py-5">
+            <div className="w-full border-t-2 border-gray-300"></div>
+          </div>
+          <div className="mt-2 ml-16 flex text-base font-medium uppercase text-[#333333]">
+            Menu
+          </div>
+          <div className="mt-2 flex items-center justify-center text-sm font-medium text-[#8f8f8f]">
+            <Button buttonName="Certificate" icon={BadgeCheckIcon} />
+          </div>
+          <div className="mt-1 flex items-center justify-center text-sm font-medium text-[#8f8f8f]">
+            <Button buttonName="Certificate" icon={BookOpenIcon} />
+          </div>
+        </div>
+      </aside>
+    </>
+  );
 }
 
 export default Nav;
