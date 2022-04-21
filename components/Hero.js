@@ -11,150 +11,18 @@ import { PDFDocument } from "pdf-lib";
 import readXlsxFile from "read-excel-file";
 import axios from "axios";
 
-const myFunction = () => {
-  let x = document.getElementById("navDemo");
-  if (x.className.indexOf("w3-show") == -1) {
-    x.className += " w3-show";
-  } else {
-    x.className = x.className.replace(" w3-show", "");
-  }
-};
-
 function Hero() {
-  const [excel_data, setExcelData] = useState("");
-  const [base64_pdf, setBase64PDF] = useState("");
-  let check_excel = () => {
-    let allowed_file_type = [
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      "application/vnd.ms-excel",
-      "application/xls",
-    ];
-    let file_type = document.getElementById("result_excel").files[0].type;
-    console.log(file_type);
-    if (!allowed_file_type.includes(file_type)) {
-      alert("Please select an excel file");
-      document.getElementById("result_excel").value = "";
-    } else {
-      check_excel_data_format();
-    }
+  const [toggleState, setToggleState] = useState(1);
+
+  const toggleTab = (index) => {
+    setToggleState(index);
   };
-  const check_pdf = () => {
-    let allowed_file_type = ["application/pdf"];
-    let file_type = document.getElementById("pdf_template").files[0].type;
-    console.log(file_type);
-    if (!allowed_file_type.includes(file_type)) {
-      alert("Please select an PDF file");
-      document.getElementById("pdf_template").value = "";
-    } else {
-      check_pdf_template();
-    }
-  };
-  const check_pdf_template = async () => {
-    let reader = new FileReader();
-    reader.readAsArrayBuffer(document.getElementById("pdf_template").files[0]);
-    reader.onload = async function () {
-      let arrayBuffer = reader.result;
-      let bytes = new Uint8Array(arrayBuffer);
-      let pdfDoc = await PDFDocument.load(bytes);
-      // try {
-      //     let form = pdfDoc.getForm();
-      //     let name = form.getTextField('name');
-      //     let rank = form.getTextField('rank');
-      // } catch (e) {
-      //     alert(e);
-      // }
-    };
-  };
-  const check_excel_data_format = () => {
-    let allowed_headers = ["Full Name", "Rank", "Email"];
-    readXlsxFile(document.getElementById("result_excel").files[0]).then(
-      (rows) => {
-        setExcelData(rows);
-        let header = rows[0];
-        try {
-          allowed_headers.forEach((e) => {
-            if (!header.includes(e)) {
-              alert("Excel does not include any header named : " + e);
-            }
-          });
-        } catch (error) {
-          alert(error);
-        }
-      }
-    );
-  };
-  const upload_data = (data) => {
-    let title = document.getElementById("title").value;
-    let pdf_template = document.getElementById("pdf_template").files[0];
-    let formData = new FormData();
-    formData.append("title", title);
-    formData.append("pdf", pdf_template);
-    formData.append("data", JSON.stringify(data));
-    //console.log(pdf_template);
-    if (
-      title !== "" ||
-      document.getElementById("excel_file").files.length != 0 ||
-      document.getElementById("pdf_template").files.length != 0
-    ) {
-      axios
-        .post("https://admin.upstageindia.in/api/v1/certificate/send", formData)
-        .then((result) => {
-          if (result.status === "success") {
-            alert("Mail sent successfully");
-          } else {
-            alert(result.message);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-          alert(error);
-        });
-    } else {
-      alert("Please fill all required fields");
-    }
-  };
-  const create_json = () => {
-    let json_obj = [];
-    for (let i = 1; i < 5; i++) {
-      if (
-        document.getElementById("pdf_" + i).value != "" ||
-        document.getElementById("excel_" + i).value != ""
-      ) {
-        json_obj.push({
-          pdf_field: document.getElementById("pdf_" + i).value,
-          excel_col: document.getElementById("excel_" + i).value,
-        });
-      }
-    }
-    let header = excel_data[0];
-    json_obj.forEach((e) => {
-      e.excel_col = header.indexOf(e.excel_col);
-    });
-    let final_object = "";
-    let excel_data_len = excel_data.length;
-    let json_obj_len = json_obj.length;
-    for (let i = 1; i < excel_data_len; i++) {
-      final_object = final_object + `{`;
-      for (let j = 0; j < json_obj_len; j++) {
-        final_object =
-          final_object +
-          `"${json_obj[j].pdf_field}":"${
-            excel_data[i][json_obj[j].excel_col]
-          }"`;
-        if (j != json_obj_len - 1) {
-          final_object = final_object + ",";
-        }
-      }
-      final_object = final_object + `}`;
-      if (i != excel_data_len - 1) {
-        final_object = final_object + ",";
-      }
-    }
-    final_object = "[" + final_object + "]";
-    final_object = JSON.parse(final_object);
-    //console.log(final_object);
-    upload_data(final_object);
-  };
+
+  const tabActive =
+    "inline-block rounded-t-lg border-b-2 border-blue-600 p-4 text-blue-600 dark:border-blue-500 dark:text-blue-500";
+  const tabNotActive =
+    "inline-block rounded-t-lg border-b-2 border-transparent p-4 hover:border-gray-300 hover:text-gray-600 dark:hover:text-gray-300";
+
   return (
     <>
       <div className=" grid h-screen grid-cols-12 gap-0 bg-[#F7FAFC] font-main">
@@ -205,27 +73,72 @@ function Hero() {
             </div>
           </div>
 
-          {/* Tab */}
-          <Tabs />
-
-          {/* Form */
+          {/* Tab*/
           /* // htmlFor // label // type // id // placeHolder // buttonName */}
-          <FormInput
-            htmlFor="title"
-            label="title"
-            type="text"
-            id="title"
-            placeHolder="Event Title"
-            buttonName="Next"
-          />
-          <FormInput
-            htmlFor="template"
-            label="template"
-            type="file"
-            id="title"
-            placeHolder="Upload File"
-            buttonName="Next"
-          />
+          <div className="mt-8 border-b border-gray-200 text-center text-sm font-medium text-gray-500 dark:border-gray-700 dark:text-gray-400">
+            <ul className="-mb-px flex flex-wrap">
+              <li className="mr-2">
+                <a
+                  href="#"
+                  className={toggleState === 1 ? tabActive : tabNotActive}
+                  onClick={() => toggleTab(1)}
+                  aria-current="page"
+                >
+                  Title & Template
+                </a>
+              </li>
+
+              <li className="mr-2">
+                <a
+                  href="#"
+                  className={toggleState === 2 ? tabActive : tabNotActive}
+                  onClick={() => toggleTab(2)}
+                >
+                  Participants Data
+                </a>
+              </li>
+              <li className="mr-2">
+                <a
+                  href="#"
+                  className={toggleState === 3 ? tabActive : tabNotActive}
+                  onClick={() => toggleTab(3)}
+                >
+                  View Certificate
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            {/* TITLE AND TEMPLATE FORM */}
+            <div className={toggleState === 1 ? "" : "hidden"}>
+              <FormInput
+                htmlFor="title"
+                label="title"
+                type="text"
+                id="title"
+                placeHolder="Event Title"
+              />
+
+              <FormInput
+                htmlFor="template"
+                label="template"
+                type="file"
+                id="title"
+                placeHolder="Upload File"
+              />
+            </div>
+
+            <div className={toggleState === 2 ? "" : "hidden"}>
+              <FormInput
+                htmlFor="excel"
+                label="excel"
+                type="file"
+                id="excel"
+                placeHolder="Upload Excel"
+                caption="Only .xls, .excel file supported"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </>
